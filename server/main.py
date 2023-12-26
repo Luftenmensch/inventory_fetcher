@@ -72,9 +72,11 @@ async def get_data(steam_id: str):
     else:
         api_data = await fetch_inventory_data(steam_id)
         if 'error' in api_data:
+            print(api_data)
             return api_data
         redis_client.setex(steam_id, data_ttl, ujson.dumps(api_data))
         updated = round(data_ttl - redis_client.ttl(steam_id))
+        print(api_data)
         return {
             'data': api_data,
             'updated': updated
